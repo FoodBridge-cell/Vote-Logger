@@ -25,7 +25,7 @@ def fetch_otp():
 
         # Extract OTP from the email body
         for part in email_message.walk():
-            if part.get_content_type() == "text/plain":
+            if part.get_content_type() == "text/plain":  # Extract plain text content
                 body = part.get_payload(decode=True).decode("utf-8")
                 otp = extract_otp_from_body(body)
                 if otp:
@@ -40,7 +40,8 @@ def fetch_otp():
         mail.logout()
 
 def extract_otp_from_body(body):
-    """Extract the OTP from the email body using regex."""
+    """Extract the OTP from the email body."""
     import re
-    otp_match = re.search(r'\b\d{6}\b', body)  # Assuming OTP is a 6-digit number
-    return otp_match.group(0) if otp_match else None
+    # Regex to find a 6-digit OTP
+    otp_match = re.search(r"Your OTP for event registration is:\s*(\d{6})", body)
+    return otp_match.group(1) if otp_match else None
